@@ -139,8 +139,7 @@ class Gobang extends React.Component{
 	    const history = this.state.history.slice(0, this.state.step + 1);
 	    const current = history[history.length - 1];
 	    const squares = current.squares.slice();
-	    const self = this;
-		let status,record;
+		let status;
 		if(this.state.winner){
 			status = 'Winner: ' + this.state.winner;
 		}else{
