@@ -27,7 +27,7 @@ class Board extends React.Component{
 	render(){
 		let rows = [];
 		for(let i=0;i<15;i++){
-			let row=[];
+			var row=[];
 			for(let j=15*i ; j<15*i+15 ; j++){
 				row.push(this.randerSquare(j));
 			}
@@ -49,20 +49,31 @@ class Gobang extends React.Component{
 	constructor(){
 		super();
 		this.state = {
-			squares:Array(15*15).fill(null),
+			history:[{
+				squares:Array(15*15).fill(null),
+				lastStep:-1,
+			}],
+			step:0,
 			isWhite: true,
 			winner:null,
 		};
 	}
 	handleClick(i){
-		const squares = this.state.squares.slice();
+	    const history = this.state.history.slice(0, this.state.step + 1);
+	    const current = history[history.length - 1];
+	    const squares = current.squares.slice();
+	    const step = this.state.step;
 		if(this.state.winner||squares[i]){
 			return;
 		}
 		squares[i] = this.state.isWhite?"white":"black";
 		const winner = this.calculateWinner(squares,i);
 		this.setState({
-			squares:squares,
+			history:history.concat([{
+				squares:squares,
+				lastStep:i,
+			}]),
+			step:step+1,
 			isWhite:!this.state.isWhite,
 			winner:winner,
 		});
@@ -71,7 +82,6 @@ class Gobang extends React.Component{
 		const chessPiece = squares[cur];
 		const chessIndexArr = [[cur],[cur],[cur],[cur]];
 		this.findSameChess(chessIndexArr,squares,cur);
-		console.log(chessIndexArr);
 		
 		for(let i=0;i<4;i++){
 			if(chessIndexArr[i].length>=5){
@@ -115,21 +125,45 @@ class Gobang extends React.Component{
 			}
 		}
 	}
+	jumpTo(i){
+	    const history = this.state.history.slice(0, this.state.step + 1);
+	    const isWhite = i%2 == 0
+		this.setState({
+			history:history.slice(0,i+1),
+			step:i,
+			isWhite:isWhite,
+			winner:history[i].winner,
+		});
+	}
 	render(){
-		const squares = this.state.squares.slice();
-		let status;
+	    const history = this.state.history.slice(0, this.state.step + 1);
+	    const current = history[history.length - 1];
+	    const squares = current.squares.slice();
+	    const self = this;
+		let status,record;
 		if(this.state.winner){
 			status = 'Winner: ' + this.state.winner;
 		}else{
 			status = 'Next player: ' + (this.state.isWhite?"white":"black");
 		}
+		let list = [];
+		for(let i=0,len=history.length;i<len;i++){
+			var pos = this.calculatePos(history[i].lastStep);
+			var str = history[i].lastStep>=0?("("+pos.x+","+pos.y+")"):"Game Start";
+			list.push(<li onClick={()=>this.jumpTo(i)} key={i}>{str}</li>);
+		}
 		return (
 			<div className="gobang">
-				<h3>{status}</h3>
 				<Board
 					squares={squares}
 					onClick={(i)=>this.handleClick(i)}
 				/>
+				<div className="boardRecord">
+					<h3>{status}</h3>
+					<ul>
+						{list}
+					</ul>
+				</div>
 			</div>
 		);
 	}

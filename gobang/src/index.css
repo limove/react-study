@@ -4,10 +4,11 @@
 .board{
 	position: relative;
 	width: 615px;
+	float:left;
 }
 .board-row{
 }
-.board-row:after {
+.board-row:after,.gobang:after {
   clear: both;
   content: "";
   display: block;
@@ -57,6 +58,21 @@
 .block.black{
 	background: black;
 }
+/*================================*/
+.boardRecord{
+	float: left;
+}
+.boardRecord ul{
+	padding: 0 0 0 10px;
+    overflow: auto;
+    height: 540px;
+}
+.boardRecord li{
+	margin: 10px 0;
+	cursor: pointer;
+	color: blue;
+}
+/*================================*/
 .shadow{
 	background: white;
 	position: absolute;
