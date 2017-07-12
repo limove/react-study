@@ -1,0 +1,88 @@
+.gobang{
+	overflow: hidden;
+}
+.board{
+	position: relative;
+	width: 615px;
+}
+.board-row{
+}
+.board-row:after {
+  clear: both;
+  content: "";
+  display: block;
+}
+.square{
+	width: 41px;
+	height: 41px;
+	position: relative;
+	float: left;
+	cursor:pointer;
+}
+.square:before,.square:after{
+	background: black;
+	display: block;
+	position: absolute;
+	content: "";
+}
+.square:before{
+	border-left: 1px solid black;
+	width: 0;
+	height: 100%;
+	top: 0;
+	left: 20px;
+}
+.square:after{
+	border-top: 1px solid black;
+	height: 0;
+	width: 100%;
+	left: 0;
+	top: 20px;
+}
+.block{
+	border:1px solid black;
+	border-radius:50%;
+	width: 32px;
+	height: 32px;
+	position: absolute;
+	z-index: 999;
+	left: 50%;
+	top:50%;
+	margin-top: -16px;
+	margin-left: -16px;
+}
+.block.white{
+	background: white;
+}
+.block.black{
+	background: black;
+}
+.shadow{
+	background: white;
+	position: absolute;
+	z-index: 99;
+}
+.shadow.up{
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 20px;
+}
+.shadow.right{
+	top: 0;
+	right: 0;
+	height: 100%;
+	width: 20px;
+}
+.shadow.down{
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 20px;
+}
+.shadow.left{
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 20px;
+}
