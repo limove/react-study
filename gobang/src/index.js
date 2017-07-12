@@ -127,7 +127,7 @@ class Gobang extends React.Component{
 	}
 	jumpTo(i){
 	    const history = this.state.history.slice(0, this.state.step + 1);
-	    const isWhite = i%2 == 0
+	    const isWhite = i%2 === 0
 		this.setState({
 			history:history.slice(0,i+1),
 			step:i,
