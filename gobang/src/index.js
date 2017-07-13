@@ -17,19 +17,11 @@ class Square extends React.Component{
 class Board extends React.Component{
   
 	randerSquare(i) {
-		const winSquares = this.props.winSquares.slice(0,this.props.winSquares.length);
-		let isWin = false;
-		for(let j=0,len = winSquares.length;j<len;j++){
-			if(winSquares[j].includes(i)){
-				isWin = true;
-				break;
-			}
-		}
 		return (
 		  <Square
 		  	key={i}
 		  	value={this.props.squares[i]}
-		  	isWin={isWin}
+		  	isWin={this.props.winSquares.includes(i)}
 		  	onClick={()=>this.props.onClick(i)}
 		  />);
 	}
@@ -98,7 +90,7 @@ class Gobang extends React.Component{
 		
 		for(let i=0;i<4;i++){
 			if(chessIndexArr[i].length>=5){
-				winArr.push(chessIndexArr[i]);
+				winArr = winArr.concat(chessIndexArr[i]);
 				winner = chessPiece;
 			}
 		}
