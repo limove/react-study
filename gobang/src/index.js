@@ -4,7 +4,8 @@ import './index.css';
 
 class Square extends React.Component{
 	render(){
-		let block = this.props.value?(<div className={"block "+this.props.value}></div>):null;
+		const strClass = this.props.isWin?" winner":"";
+		let block = this.props.value?(<div className={"block "+this.props.value+strClass}></div>):null;
 		return (
 			<div className="square" onClick={()=>this.props.onClick()}>
 				{block}
@@ -16,12 +17,21 @@ class Square extends React.Component{
 class Board extends React.Component{
   
 	randerSquare(i) {
-	return (
-	  <Square
-	  	key={i}
-	  	value={this.props.squares[i]}
-	  	onClick={()=>this.props.onClick(i)}
-	  />);
+		const winSquares = this.props.winSquares.slice(0,this.props.winSquares.length);
+		let isWin = false;
+		for(let j=0,len = winSquares.length;j<len;j++){
+			if(winSquares[j].includes(i)){
+				isWin = true;
+				break;
+			}
+		}
+		return (
+		  <Square
+		  	key={i}
+		  	value={this.props.squares[i]}
+		  	isWin={isWin}
+		  	onClick={()=>this.props.onClick(i)}
+		  />);
 	}
 
 	render(){
@@ -56,6 +66,7 @@ class Gobang extends React.Component{
 			step:0,
 			isWhite: true,
 			winner:null,
+			winSquares:[],
 		};
 	}
 	handleClick(i){
@@ -67,7 +78,7 @@ class Gobang extends React.Component{
 			return;
 		}
 		squares[i] = this.state.isWhite?"white":"black";
-		const winner = this.calculateWinner(squares,i);
+		const [winner,winSquares] = this.calculateWinner(squares,i);
 		this.setState({
 			history:history.concat([{
 				squares:squares,
@@ -76,19 +87,22 @@ class Gobang extends React.Component{
 			step:step+1,
 			isWhite:!this.state.isWhite,
 			winner:winner,
+			winSquares:winSquares,
 		});
 	}
 	calculateWinner(squares,cur){
 		const chessPiece = squares[cur];
 		const chessIndexArr = [[cur],[cur],[cur],[cur]];
+		let winner = null,winArr=[];
 		this.findSameChess(chessIndexArr,squares,cur);
 		
 		for(let i=0;i<4;i++){
 			if(chessIndexArr[i].length>=5){
-				return chessPiece;
+				winArr.push(chessIndexArr[i]);
+				winner = chessPiece;
 			}
 		}
-		return null;
+		return [winner,winArr];
 	}
 	calculatePos(pos){
 		return {
@@ -133,12 +147,14 @@ class Gobang extends React.Component{
 			step:i,
 			isWhite:isWhite,
 			winner:history[i].winner,
+			winSquares:[],
 		});
 	}
 	render(){
 	    const history = this.state.history.slice(0, this.state.step + 1);
 	    const current = history[history.length - 1];
 	    const squares = current.squares.slice();
+	    const winSquares = this.state.winSquares.slice(0, this.state.winSquares.length);
 		let status;
 		if(this.state.winner){
 			status = 'Winner: ' + this.state.winner;
@@ -155,6 +171,7 @@ class Gobang extends React.Component{
 			<div className="gobang">
 				<Board
 					squares={squares}
+					winSquares={winSquares}
 					onClick={(i)=>this.handleClick(i)}
 				/>
 				<div className="boardRecord">

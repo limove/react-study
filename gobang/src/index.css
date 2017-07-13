@@ -52,6 +52,9 @@
 	margin-top: -16px;
 	margin-left: -16px;
 }
+.block.winner{
+	box-shadow: 0 0 10px #ec0d0d;
+}
 .block.white{
 	background: white;
 }
