@@ -48,7 +48,7 @@ class Month extends React.Component{
 		return a;
 	}
 	render(){
-		const year = this.props.year,month = this.props.month,curTime = this.props.curTime;
+		const year = this.props.year,month = this.props.month,curTime = new Date(this.props.curTime);
 		const curTimeObj={
 			year:curTime.getFullYear(),
 			month:curTime.getMonth()+1,
@@ -151,9 +151,9 @@ class Board extends React.Component{
 		}
 	}
 	render(){
-		const viewTime = this.props.viewTime,
+		const viewTime = new Date(this.props.viewTime),
 			  curItem = this.props.curItem,
-			  curTime = this.props.curTime;
+			  curTime = new Date();
 		let item = this.renderBoard(curItem,viewTime,curTime);
 		return (
 			<div className={curItem+"Board clearfix"}>
