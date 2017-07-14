@@ -18,21 +18,57 @@ class Data extends React.Component{
 
 class Month extends React.Component{
 	getDaysNum(year,month){
-		return 31;
+		const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);  
+		switch(month){
+			case 1:
+			case 3:
+			case 5:
+			case 7:
+			case 8:
+			case 10:
+			case 12:
+				return 31;
+			case 4:
+			case 6:
+			case 9:
+			case 11:
+				return 30;
+			case 2:
+				return isLeapYear?29:28;
+			default:
+				return 0;
+		}
 	}
+	//zeller公式
 	calWeek(c,y,m,d){
+		m = m<3?(y-=m,12+m):m;
 		let a = (y+parseInt(y/4,10)+parseInt(c/4,10)-2*c+parseInt(26*(m+1)/10,10)+d-1)%7;
-		a=a>0?a:a+7;
+		a=(a+7)%7;
 		return a;
 	}
 	render(){
+		const year = this.props.year,month = this.props.month;
 		const rows = [],
-			  daysNum = this.getDaysNum(this.props.year,this.props.month);
-	  	for(let i=0;i<daysNum;i++){
-	  		rows.push(<Data
-  				key={i}
-  				data={i+1}
-  			/>);
+			  daysNum = this.getDaysNum(year,month);
+		// const day = this.calWeek(parseInt(year/100,10),year % 10,month,1);
+		const day = (new Date(year+"/"+month+"/"+1)).getDay();
+		const firstLineNum = 7-day;
+		const line = Math.ceil((daysNum-firstLineNum)/7)+1;
+		let data = 0;
+	  	for(let i=0;i<line;i++){
+	  		var row = [];
+	  		for(let j=0;j<7&&data<daysNum;j++){
+	  			if(i===0 && j+1>firstLineNum) {break;}
+	  			row.push(<Data
+  					key={++data}
+  					data={data}
+  				/>);
+	  		}
+	  		rows.push(<div
+	  			className="row"
+				key={i}>
+	  				{row}
+	  			</div>);
 	  	}
 		return (
 			<div className="month">
