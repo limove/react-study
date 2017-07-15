@@ -45,7 +45,11 @@ class DayTime extends React.Component{
 				}})(i)}
 				>{i>9?i:"0"+i}:00</li>);
 		}
-		return (<div className={"dayTime"+(this.props.select.showDayTime?" active":"")}>
+		return (<div id="dayTime" className={"dayTime"+(this.props.select.showDayTime?" active":"")}>
+				<div
+				className="closeDaytime"
+				onClick={()=>this.props.closeDaytime()}
+				>X</div>
 				<ul>{timeList}</ul>
 			</div>);
 	}
@@ -65,7 +69,7 @@ class DateBlock extends React.Component{
 				if(e.altKey && !e.shiftKey) {keyState=1;}
 				if(!e.altKey && e.shiftKey) {keyState=2;}
 				if(e.altKey && e.shiftKey) {keyState=3;}
-				this.props.onDateSelect(timeObj,keyState);
+				this.props.onDateSelect(timeObj,keyState,e);
 			}}
 			>
 				{this.props.date}
@@ -151,7 +155,7 @@ class Month extends React.Component{
 	  					month={month}
 	  					date={date}
 	  					addClass={addClass}
-						onDateSelect={(timeObj,keyState)=>this.props.onDateSelect(timeObj,keyState)}
+						onDateSelect={(timeObj,keyState,event)=>this.props.onDateSelect(timeObj,keyState,event)}
   					/>);
 	  			}else{
 		  			row.push(<DateBlock
@@ -160,7 +164,7 @@ class Month extends React.Component{
 	  					month={month}
 	  					date={date}
 	  					addClass={addClass}
-						onDateSelect={(timeObj,keyState)=>this.props.onDateSelect(timeObj,keyState)}
+						onDateSelect={(timeObj,keyState,event)=>this.props.onDateSelect(timeObj,keyState,event)}
 	  				/>);
 	  			}
 	  		}
@@ -196,7 +200,7 @@ class Year extends React.Component{
 				month={i+1}
 				curTime={this.props.curTime}
 				onChangeBoard={()=>this.props.onChangeBoard("toMonth",i+1)}
-				onDateSelect={(timeObj,keyState)=>this.props.onDateSelect(timeObj,keyState)}
+				onDateSelect={(timeObj,keyState,event)=>this.props.onDateSelect(timeObj,keyState,event)}
 				select={this.props.select}
 			/>);
 		}
@@ -217,7 +221,7 @@ class Board extends React.Component{
 					curTime={curTime}
 					select={this.props.select}
 					onChangeBoard={(dir,val)=>this.props.onChangeBoard(dir,val)}
-					onDateSelect={(timeObj,keyState)=>this.props.onDateSelect(timeObj,keyState)}
+					onDateSelect={(timeObj,keyState,event)=>this.props.onDateSelect(timeObj,keyState,event)}
 				/>);
 			case "month":
 				return (<Month
@@ -225,7 +229,7 @@ class Board extends React.Component{
 					year={viewTime.getFullYear()}
 					month={viewTime.getMonth()+1}
 					select={this.props.select}
-					onDateSelect={(timeObj,keyState)=>this.props.onDateSelect(timeObj,keyState)}
+					onDateSelect={(timeObj,keyState,event)=>this.props.onDateSelect(timeObj,keyState,event)}
 				/>);
 			/*case "day":
 				return (<DayTime
@@ -242,9 +246,12 @@ class Board extends React.Component{
 			  curTime = new Date();
 		let item = this.renderBoard(curItem,viewTime,curTime);
 		return (
-			<div className={curItem+"Board clearfix"}>
+			<div
+			className={curItem+"Board clearfix"}
+			>
 				{item}
 				<DayTime
+					closeDaytime={()=>this.props.closeDaytime()}
 					select={this.props.select}
 					dayTime={this.props.dayTime}
 					onDateSelect={(timeObj,keyState)=>this.props.onDateSelect(timeObj,keyState)}
@@ -384,7 +391,8 @@ class Calendar extends React.Component{
 			viewTime:viewTime,
 		});
 	}
-	dateSelect(timeObj,keyState){
+	dateSelect(timeObj,keyState,event){
+		if(this.state.curItem === "year") return;
 		const select = this.state.select;
 		let dayTime = this.state.dayTime;
 		const newSelect={
@@ -401,6 +409,11 @@ class Calendar extends React.Component{
 				newSelect.showDayTime = true;
 				dayTime = timeObj.start;
 				newSelect.selectedTime = newSelect.selectedTime.concat(select.selectedTime);
+				if(event){
+					const oTime = document.getElementById("dayTime");
+					oTime.style.top=event.clientY+"px";
+					oTime.style.left=event.clientX+"px";
+				}
 				break;
 			case 3:
 				if(timeObj.start > newSelect.lastSelectedTime){
@@ -470,6 +483,14 @@ class Calendar extends React.Component{
 			dayTime:dayTime,
 		});
 	}
+	closeDaytime(){
+		var select = {
+			showDayTime:false,
+			selectedTime:this.state.select.selectedTime,
+			lastSelectedTime:this.state.select.lastSelectedTime,
+		}
+		this.setState({select:select});
+	}
 	render(){
 		const viewTime = this.state.viewTime,
 			  curItem = this.state.curItem;
@@ -503,7 +524,8 @@ class Calendar extends React.Component{
 					select={this.state.select}
 					dayTime={this.state.dayTime}
 					onChangeBoard={(dir,val)=>this.changeBoardClick(dir,val)}
-					onDateSelect={(timeObj,keyState)=>this.dateSelect(timeObj,keyState)}
+					onDateSelect={(timeObj,keyState,event)=>this.dateSelect(timeObj,keyState,event)}
+					closeDaytime={()=>this.closeDaytime()}
 				/>
 			</div>
 		);

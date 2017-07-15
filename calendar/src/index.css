@@ -73,7 +73,6 @@ user-select: none; /* Non-prefixed version, currently not supported by any brows
 }
 .dayTime{
 	display: none;
-	overflow: auto;
     height: 150px;
     position: absolute;
     z-index: 999;
@@ -83,4 +82,14 @@ user-select: none; /* Non-prefixed version, currently not supported by any brows
 }
 .dayTime.active{
 	display: block;
+}
+.dayTime ul{
+	height: 100%;
+	overflow: auto;
+}
+.closeDaytime{
+	position: absolute;
+	cursor: pointer;
+	top: -24px;
+    right: -16px;
 }
