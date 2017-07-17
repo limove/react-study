@@ -17,17 +17,20 @@ user-select: none; /* Non-prefixed version, currently not supported by any brows
 	height: 100%;
 	min-width: 400px;
 	min-height: 400px;
+	border:1px solid black;
 }
 .calendarMenu{
 	height: 10%;
 	font-size: 25px;
 	text-align: center;
 	position: relative;
+	border-bottom: 1px solid black;
 }
 .prevBoard{
 	position: absolute;
 	height: 100%;
-	left: 0;
+	left: 20px;
+	cursor: pointer;
 }
 .prevBtn,.nextBtn,.calendarTime,.prevBoard span{
 	vertical-align:sub;
@@ -52,6 +55,14 @@ user-select: none; /* Non-prefixed version, currently not supported by any brows
 }
 .monthBoard{
 	font-size: 25px;
+}
+.monthNum{
+    display: flex;
+    align-items: Center;
+}
+.monthNum p{
+    width: 14.28%;
+    text-align: center;
 }
 .monthBoard .month{
 	width: 100%;

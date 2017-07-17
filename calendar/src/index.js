@@ -26,7 +26,7 @@ class DayTime extends React.Component{
 				start:new Date(dayTime.getFullYear(),dayTime.getMonth(),dayTime.getDate()),
 				end:new Date(dayTime.getFullYear(),dayTime.getMonth(),dayTime.getDate()),
 			};
-		for(let i=0;i<25;i++){
+		for(let i=0;i<24;i++){
 			timeObj.start.setHours(i);
 			timeObj.end.setHours(i+1);
 			timeList.push(<li
@@ -183,7 +183,7 @@ class Month extends React.Component{
 					}
 				}}
 			>
-				<h3 className="monthNum">{month}月</h3>
+				<h3 className="monthNum"><p>{month}月</p></h3>
 				{rows}
 			</div>
 		);
@@ -411,8 +411,8 @@ class Calendar extends React.Component{
 				newSelect.selectedTime = newSelect.selectedTime.concat(select.selectedTime);
 				if(event){
 					const oTime = document.getElementById("dayTime");
-					oTime.style.top=event.clientY+"px";
-					oTime.style.left=event.clientX+"px";
+					oTime.style.top=event.pageY+"px";
+					oTime.style.left=event.pageX+"px";
 				}
 				break;
 			case 3:
@@ -429,13 +429,13 @@ class Calendar extends React.Component{
 					if(+time.start <= +timeObj.start){
 						if(+time.end >=+timeObj.end){
 							delIndex=i;
-							if(+time.start!=+timeObj.start){
+							if(+time.start!==+timeObj.start){
 								addArr.push({
 								start:time.start,
 								end:timeObj.start,
 								});
 							}
-							if(+time.end!=+timeObj.end){
+							if(+time.end!==+timeObj.end){
 								addArr.push({
 								start:timeObj.end,
 								end:time.end,
@@ -470,7 +470,7 @@ class Calendar extends React.Component{
 				}
 				if(i>=newSelect.selectedTime.length && waitDel.length === 0){
 					newSelect.selectedTime.push(timeObj);
-				}else if(delIndex!=-1){
+				}else if(delIndex!==-1){
 					newSelect.selectedTime.splice(delIndex,1,...addArr);
 				}
 				break;
@@ -498,7 +498,7 @@ class Calendar extends React.Component{
 		let prevStr = "";
 		switch(curItem){
 			case "month":
-				prevStr = strTime;
+				prevStr = "< "+strTime;
 				strTime += (viewTime.getMonth()+1) + "月";
 				break;
 			/*case "day":
