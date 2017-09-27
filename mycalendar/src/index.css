@@ -1,0 +1,60 @@
+.noselect {
+-webkit-touch-callout: none; /* iOS Safari */
+-webkit-user-select: none; /* Chrome/Safari/Opera */
+-khtml-user-select: none; /* Konqueror */
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* Internet Explorer/Edge */
+user-select: none; /* Non-prefixed version, currently not supported by any browser */
+}
+.calendar{
+	border:1px solid black;
+}
+.calendarMenu{
+	height: 10%;
+	font-size: 25px;
+	width: 100%;
+	border-bottom: 1px solid black;
+	display: flex;
+	justify-content: space-between;
+}
+.prevBtn,.nextBtn,.calendarTime{
+	cursor:pointer;
+}
+.prevBtn,.nextBtn{
+	margin: 0 20px;
+}
+.calendarBoard{
+	
+}
+.yearRow,.monthRow{
+	display: flex;
+	justify-content: space-around;
+}
+.dateRow{
+	display: flex;
+	justify-content: space-around;
+}
+.yearItem,.monthItem,.dateItem,.dateTitle{
+	padding: 10px 0;
+	border:1px solid black;
+	cursor: pointer;
+	text-align: center;
+}
+.yearItem{
+	width: 19%;
+}
+.monthItem{
+	width: 24%;
+}
+.dateItem,.dateTitle{
+	width: 14%;
+}
+.dateItem.today{
+	color:red;
+}
+.active{
+	background-color: #1dbffd;
+}
+.notThisMonth{
+	color: #888888;
+}
