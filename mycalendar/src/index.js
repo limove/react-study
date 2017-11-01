@@ -83,6 +83,7 @@ class Board extends React.Component{
 		let curView = this.props.curView,
 			viewTime = this.props.viewTime,
 			viewTimeTemp = new Date(viewTime),
+			today = this.props.today,
 			rowList = [];
 		switch(curView){
 			case 0:
@@ -94,7 +95,7 @@ class Board extends React.Component{
 						row.push(<YearItem
 									key={i*5 + j}
 									year={firstYear + i*5 + j}
-									today={false}
+									today={today.getFullYear()===(firstYear + i*5 + j)}
 									//active={this.isSelected(firstYear + i*5 + j)}
 									active={this.isSelected(viewTimeTemp)}
 									viewTime={viewTime}
@@ -107,14 +108,15 @@ class Board extends React.Component{
 				break;
 			case 1:
 				for(let i = 0;i < 3;i++){
-					let row = [];
+					let row = [],
+						year = viewTime.getFullYear();
 					for(let j = 0;j < 4;j++){
 						viewTimeTemp.setDate(1);
 						viewTimeTemp.setMonth(i*4 + j);
 						row.push(<MonthItem
 									key={i*4 + j + 1}
 									month={i*4 + j + 1}
-									today={false}
+									today={today.getFullYear()===year&&today.getMonth()===(i*4 + j)}
 									//active={this.isSelected(i*4 + j + 1)}
 									active={this.isSelected(viewTimeTemp)}
 									viewTime={viewTime}
@@ -128,8 +130,7 @@ class Board extends React.Component{
 			case 2:
 				let year = viewTime.getFullYear(),
 					month = viewTime.getMonth()+1,
-					today = this.props.today,
-					week = (new Date(year+"-"+month+"-1")).getDay(),
+					week = (new Date(year+"/"+month+"/1")).getDay(),
 					firstDay = 1 - week,
 					days = this.getDays(year,month);
 				let title = [],
@@ -200,15 +201,15 @@ class Menu extends React.Component{
 }
 
 class Calendar extends React.Component{
-	constructor(){
-		super();
+	constructor(props){
+		super(props);
 		let now = new Date();
 		this.state = {
 			maxView:2,
 			minView:0,
-			curView:2,
-			viewTime:now,
-			selectTime:[]
+			curView:props.curView||2,
+			viewTime:props.viewTime||now,
+			selectTime:props.selectTime||[]
 		};
 	}
 	prevBtnClick(){
@@ -347,5 +348,8 @@ function compareTime(time1,time2,limit){
 	return 0;
 }
 
+
 //==================================
-ReactDOM.render(<Calendar />, document.getElementById('root'));
+ReactDOM.render(<Calendar
+					curView={1}
+				 />, document.getElementById('root'));

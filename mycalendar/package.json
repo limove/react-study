@@ -1,4 +1,5 @@
 {
+  "homepage": ".",
   "name": "mycaldendar",
   "version": "0.1.0",
   "private": true,

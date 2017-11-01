@@ -49,7 +49,7 @@ user-select: none; /* Non-prefixed version, currently not supported by any brows
 .dateItem,.dateTitle{
 	width: 14%;
 }
-.dateItem.today{
+.today{
 	color:red;
 }
 .active{
