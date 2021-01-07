@@ -17,6 +17,7 @@ class YearItem extends React.Component{
 }
 
 class MonthItem extends React.Component{
+	
 	render(){
 		return (<span
 					className={'monthItem' + (this.props.active?' active':'') + (this.props.today?' today':'') }
